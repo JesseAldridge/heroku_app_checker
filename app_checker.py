@@ -1,4 +1,4 @@
-import subprocess, re, os
+import subprocess, re, os, time
 
 import records
 
@@ -8,7 +8,7 @@ import secrets
 # Get all the tags in the git repo.  Match them against Heroku releases and alembic version.
 
 os.chdir(os.path.expanduser(secrets.PROJECT_PATH))
-subprocess.call('git pull upstream'.split())
+subprocess.call('git pull'.split())
 proc = subprocess.Popen(
     'git show-ref --tags'.split(), stdout=subprocess.PIPE)
 stdout = proc.communicate()[0]
