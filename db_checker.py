@@ -35,7 +35,7 @@ def run_tests():
 
     test_failure_strs = []
 
-    for _db_url_with_creds in secrets.app_name_to_db_url.values():
+    for _, _, _db_url_with_creds in secrets.apps:
         def add_failure_str(expected, actual):
             test_failure_strs.append(
                 'expected: {}; actual: {};\nsafe_db_url: ```{}```\nquery: \n```{}```'.format(

@@ -1,4 +1,3 @@
-
 import os, json, re, time
 from datetime import datetime
 
@@ -24,7 +23,7 @@ def index():
             line = line_iter.next()
         except StopIteration:
             return 'Report not found'
-        if line.startswith('App Name'):
+        if re.search('App Name', line):
             break
 
 
@@ -33,7 +32,7 @@ def index():
     try:
         for _ in range(10 ** 3):
             line = line_iter.next()
-            if not line.startswith('gigwalk-'):
+            if not re.search('gigwalk-', line):
                 continue
             column_cells = ['<td>{}</td>'.format(s) for s in line.split()]
             table_rows.append('<tr>{}</tr>'.format(''.join(column_cells)))
