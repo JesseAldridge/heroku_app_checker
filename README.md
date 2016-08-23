@@ -1,4 +1,4 @@
-![Screenshot](/screenshot2.png?raw=true "Screenshot")
+![Screenshot](/screenshot.png?raw=true "Screenshot")
 
 Create a `secrets.py` file following the format in `secrets.py.fake_example`.
 
