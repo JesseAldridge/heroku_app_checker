@@ -8,7 +8,7 @@ Then run the server in one process and `python loop.py &` in another.
 
 Here is how I like to run the server:
 
-`#Install gunicorn if necessary`
+Install gunicorn if necessary:
 `sudo apt-get install gunicorn`
 
 `sudo gunicorn server:app -b 0.0.0.0:80 --log-file=- &`
