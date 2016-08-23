@@ -10,7 +10,7 @@ import secrets
 
 for repo_path, apps in secrets.repo_to_heroku_apps.iteritems():
     os.chdir(os.path.expanduser(repo_path))
-    subprocess.call('git pull upstream'.split())
+    subprocess.call('git pull'.split())
     proc = subprocess.Popen(
         'git show-ref --tags --dereference'.split(), stdout=subprocess.PIPE)
     stdout = proc.communicate()[0]
