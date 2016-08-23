@@ -8,7 +8,7 @@ import secrets
 
 # Get all the tags in the git repo.  Match them against Heroku releases and alembic version.
 
-for repo_path, apps in secrets.repo_to_heroku_apps.iteritems():
+for repo_path, apps in secrets.repo_to_heroku_apps:
     os.chdir(os.path.expanduser(repo_path))
     subprocess.call('git pull'.split())
     proc = subprocess.Popen(

@@ -26,7 +26,9 @@ def index():
 
         .table-container { display: inline-block; }
 
-        table{border-collapse:collapse; width:570px}
+        table.front-end {width: 500px}
+        table.back-end {width: 650px}
+        table {border-collapse:collapse}
 
         table tr:nth-child(odd) {
           background: #eeeeee
@@ -76,11 +78,11 @@ def build_tables(report_path, table_titles):
         tables.append('''
         <div class="table-container">
             <h3>{}</h3>
-            <table>
+            <table class="{}">
                 {}
             </table>
         </div>
-        '''.format(table_title, '\n'.join(table_rows)))
+        '''.format(table_title, table_title.lower().replace(' ', '-'), '\n'.join(table_rows)))
     return tables
 
 if __name__ == '__main__':
