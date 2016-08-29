@@ -52,19 +52,11 @@ def index():
 def build_tables(report_path, table_titles):
     with open(report_path) as f:
         text = f.read()
-    line_iter = iter(text.splitlines())
+    path_to_repo = json.loads(text)
 
     tables = []
-    for table_title in table_titles:
-        for _ in range(10 ** 3):
-            try:
-                line = line_iter.next()
-            except StopIteration:
-                return 'Report not found.'
-            if re.search('App Name', line):
-                break
-
-        column_names = [s.strip() for s in re.split(' {2,}', line)]
+    for table_title, repo_dict in path_to_repo.iteritems():
+        column_names = repo_dict['apps'][0].keys() if repo_dict['apps'] else []
         table_rows = [
             '<tr>{}</tr>'.format(''.join(['<th>{}</th>'.format(s) for s in column_names]))]
         for _ in range(10 ** 3):
@@ -82,7 +74,9 @@ def build_tables(report_path, table_titles):
                 {}
             </table>
         </div>
-        '''.format(table_title, table_title.lower().replace(' ', '-'), '\n'.join(table_rows)))
+        <div>{}</div>
+        '''.format(table_title, table_title.lower().replace(' ', '-'),
+                   '\n'.join(table_rows), merges_needed))
     return tables
 
 if __name__ == '__main__':

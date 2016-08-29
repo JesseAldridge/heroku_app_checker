@@ -15,3 +15,8 @@ Install gunicorn if necessary:
 
 
 You'll need to install heroku toolbelt and setup ssh access to GitHub for this to work.
+
+
+----
+
+"server.py" -> "app_checker_report.txt" <- app_checker.py
