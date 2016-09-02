@@ -43,7 +43,7 @@ Clone the repos you want to track:
 Switch to the application directory:  `cd heroku_app_checker`
 
 Run gunicorn:  `sudo gunicorn server:app -w 4 -b 0.0.0.0:80 --log-file=- &`  
-Run the report generator loop in the background:  `python loop.py &`  
+Run the report generator loop:  `python loop.py &`  
 
 Ctrl+D to logoff
 
