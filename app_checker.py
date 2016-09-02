@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import subprocess, re, os, time, collections
 
 import records
