@@ -5,6 +5,10 @@ import flask
 
 import secrets
 
+#
+# On each request, parse the latest ~/app_checker_report.txt and return it as an html table.
+#
+
 
 app = flask.Flask(__name__)
 
