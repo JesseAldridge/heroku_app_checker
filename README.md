@@ -1,5 +1,9 @@
 ![Screenshot](/screenshot2.png?raw=true "Screenshot")
 
+Keep track of many parallel heroku instances in one place.
+
+** Installation **
+
 Clone the repo:  `git clone https://github.com/JesseAldridge/heroku_app_checker`
 
 Create a `secrets.py` file following the format in `secrets.py.fake_example`.
