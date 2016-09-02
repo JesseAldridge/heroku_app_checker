@@ -33,8 +33,8 @@ Install gunicorn:  `sudo apt-get install gunicorn`
 Install requirements:  `pip install -r requirements.txt --user`.  
 Install heroku toolbelt:  `wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh`  
 
-For a non-public repo, add a GitHub ssh key to `~/.ssh/`
-(You may want to create a separate user for this if more than one person will work on this.)
+For a non-public repo, add a GitHub ssh key to `~/.ssh/`  
+(You may want to create a separate user for this if you are collaborating with others.)
 
 Clone the repos you want to track:  
   `git clone git@github.com:my_company/my_frontend.git`  
