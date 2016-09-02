@@ -4,13 +4,11 @@ Keep track of many parallel heroku instances in one place.
 
 # Installation
 
+Note: I haven't yet tested these instructions, so there's probably a few rough edges here and there.
+
 Clone the repo:  `git clone https://github.com/JesseAldridge/heroku_app_checker`
 
 Create a `secrets.py` file following the format in `secrets.py.fake_example`.
-
-Set up a remote server.  Here is how I do it:
-
-Note: I haven't yet tested these instructions, so there's probably a few rough edges here and there.
 
 Create a Ubuntu [ec2 box](https://aws.amazon.com/ec2/) (the smallest kind is fine).
 
