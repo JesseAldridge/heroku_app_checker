@@ -18,10 +18,10 @@ Make sure port 80 is accessible (configured via security group).
 
 Modify your ~/.ssh/config to point to it.  Mine looks something like this:
 
-Host app-checker
-    HostName 12.345.56.789
-    User ubuntu
-    IdentityFile ~/.ssh/my-ssh-key.pem
+    Host app-checker
+        HostName 12.345.56.789
+        User ubuntu
+        IdentityFile ~/.ssh/my-ssh-key.pem
 
 Install [Fabric](http://www.fabfile.org/) on your local machine.
 
