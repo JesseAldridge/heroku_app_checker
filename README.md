@@ -4,7 +4,8 @@ Keep track of many parallel heroku instances in one place.
 
 # Installation
 
-Note: I haven't yet tested these instructions, so there's probably a few rough edges here and there.
+Note: I haven't yet tested these instructions, so there are probably a few rough edges here and 
+there.
 
 Clone the repo:  `git clone https://github.com/JesseAldridge/heroku_app_checker`
 
