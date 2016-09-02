@@ -29,10 +29,10 @@ rsync the files to the remote server.  You can just run `fab deploy_server` to d
 
 ssh into the server.  `ssh app-checker`
 
-Install pip:  `sudo easy_install pip`
-Install gunicorn:  `sudo apt-get install gunicorn`
-Install requirements:  `pip install -r requirements.txt --user`.
-Install heroku toolbelt:  `wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh`
+Install pip:  `sudo easy_install pip`  
+Install gunicorn:  `sudo apt-get install gunicorn`  
+Install requirements:  `pip install -r requirements.txt --user`.  
+Install heroku toolbelt:  `wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh`  
 
 For a non-public repo, add a GitHub ssh key to `~/.ssh/`
 (You may want to create a separate user for this if more than one person will work on this.)
