@@ -8,7 +8,7 @@ Clone the repo:  `git clone https://github.com/JesseAldridge/heroku_app_checker`
 
 Create a `secrets.py` file following the format in `secrets.py.fake_example`.
 
-Setup a remote server.  Here is how I do it:
+Set up a remote server.  Here is how I do it:
 
 Note, I haven't yet tested these instructions, so there's probably a few rough edges here and there.
 
