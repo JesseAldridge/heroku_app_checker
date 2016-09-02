@@ -10,7 +10,7 @@ Create a `secrets.py` file following the format in `secrets.py.fake_example`.
 
 Set up a remote server.  Here is how I do it:
 
-Note, I haven't yet tested these instructions, so there's probably a few rough edges here and there.
+Note: I haven't yet tested these instructions, so there's probably a few rough edges here and there.
 
 Create a Ubuntu [ec2 box](https://aws.amazon.com/ec2/) (the smallest kind is fine).
 
