@@ -41,11 +41,9 @@ def index():
             margin-bottom: 6px
         }
 
-        #front-end { background-color: #bce8f1 }
-        #front-end tr:nth-child(even) { background-color: #ccf8ff }
+        #front-end tr:nth-child(even) { background-color: #eee }
 
-        #back-end { background-color: #faebcc }
-        #back-end tr:nth-child(even) { background-color: #fffbdc }
+        #back-end tr:nth-child(even) { background-color: #eee }
 
         table.front-end {width: 500px}
         table.back-end {width: 650px}
