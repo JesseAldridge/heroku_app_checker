@@ -1,4 +1,4 @@
-import os, json, re, time
+import os, json, re, time, sys
 from datetime import datetime
 
 import flask
@@ -11,6 +11,7 @@ import secrets
 
 
 app = flask.Flask(__name__)
+port = int(sys.argv[1]) if len(sys.argv) == 2 else 80
 
 os.environ['TZ'] = "US/Pacific"
 time.tzset()
@@ -18,7 +19,7 @@ time.tzset()
 @app.route('/')
 def index():
     report_path = os.path.expanduser('~/app_checker_report.txt')
-    tables = build_tables(report_path, ('Front End', 'Back End'))
+    tables = build_tables(report_path, ('Front-End', 'Back-End'))
     mod_time = os.path.getmtime(report_path)
     last_mod_dt = datetime.fromtimestamp(mod_time)
 
@@ -28,15 +29,27 @@ def index():
     <style>
         .outer { margin: 1px; width: 2000px }
 
-        .table-container { display: inline-block; }
+        .table-container {
+            display: inline-block;
+            margin: 5px;
+            padding: 7px;
+            border: solid;
+        }
+
+        .table-title {
+            font-size: 30px;
+            margin-bottom: 6px
+        }
+
+        #front-end { background-color: #bce8f1 }
+        #front-end tr:nth-child(even) { background-color: #ccf8ff }
+
+        #back-end { background-color: #faebcc }
+        #back-end tr:nth-child(even) { background-color: #fffbdc }
 
         table.front-end {width: 500px}
         table.back-end {width: 650px}
         table {border-collapse:collapse}
-
-        table tr:nth-child(odd) {
-          background: #eeeeee
-        }
 
         td {
           background: inherit;
@@ -79,16 +92,17 @@ def build_tables(report_path, table_titles):
                 continue
             column_cells = ['<td>{}</td>'.format(s) for s in line.split()]
             table_rows.append('<tr>{}</tr>'.format(''.join(column_cells)))
+        table_id = table_title.lower().replace(' ', '-')
         tables.append('''
-        <div class="table-container">
-            <h3>{}</h3>
+        <div class="table-container" id="{}">
+            <div class="table-title">{}</div>
             <table class="{}">
                 {}
             </table>
         </div>
-        '''.format(table_title, table_title.lower().replace(' ', '-'), '\n'.join(table_rows)))
+        '''.format(table_id, table_title, table_title.lower().replace(' ', '-'),
+                   '\n'.join(table_rows)))
     return tables
 
 if __name__ == '__main__':
-    # Bind to PORT if defined, otherwise default to 3000.
-    app.run(host='0.0.0.0', port=secrets.PORT, debug=(secrets.PORT==3000))
+    app.run(host='0.0.0.0', port=port, debug=(port != 80))
