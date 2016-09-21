@@ -42,9 +42,13 @@ for repo_path, apps in secrets.repo_to_heroku_apps:
                 'heroku config:get ALEMBIC_DATABASE_URL --app {}'.format(app_name).split(),
                 stdout=subprocess.PIPE)
             _db_url_with_creds = proc.communicate()[0]
-            db = records.Database(_db_url_with_creds)
-            rows = db.query('select * from alembic_version')
-            alembic_version = rows[0]['version_num']
+            try:
+                db = records.Database(_db_url_with_creds)
+            except ValueError:
+                alembic_version = 'error'
+            else:
+                rows = db.query('select * from alembic_version')
+                alembic_version = rows[0]['version_num']
             row_str_params.append(alembic_version)
         print row_str.format(*row_str_params).encode('utf8')
     print '```'
