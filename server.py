@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import os, json, re, time, sys
 from datetime import datetime
 
@@ -6,7 +8,7 @@ import flask
 import secrets
 
 #
-# On each request, parse the latest ~/app_checker_report.txt and return it as an html table.
+# On each request, parse the latest ~/repos.json and return it as an html table.
 #
 
 
@@ -18,7 +20,7 @@ time.tzset()
 
 @app.route('/')
 def index():
-    report_path = os.path.expanduser('~/app_checker_report.txt')
+    report_path = os.path.expanduser('repos.json')
     tables = build_tables(report_path, ('Front-End', 'Back-End'))
     mod_time = os.path.getmtime(report_path)
     last_mod_dt = datetime.fromtimestamp(mod_time)
@@ -45,12 +47,12 @@ def index():
 
         #back-end tr:nth-child(even) { background-color: #eee }
 
-        table.front-end {width: 500px}
-        table.back-end {width: 650px}
         table {border-collapse:collapse}
 
         td {
           background: inherit;
+          padding: 1px;
+          padding-right: 10px;
         }
 
         .last_mod { margin-top: 20px; }
@@ -67,29 +69,23 @@ def index():
 def build_tables(report_path, table_titles):
     with open(report_path) as f:
         text = f.read()
-    line_iter = iter(text.splitlines())
+    repo_dicts = json.loads(text)
 
     tables = []
-    for table_title in table_titles:
-        for _ in range(10 ** 3):
-            try:
-                line = line_iter.next()
-            except StopIteration:
-                return 'Report not found.'
-            if re.search('App Name', line):
-                break
+    column_names = ['icon_str', 'domain_name', 'app_name', 'tag', 'alembic_version']
+    for table_title, repo_dict in zip(table_titles, repo_dicts):
 
-        column_names = [s.strip() for s in re.split(' {2,}', line)]
-        table_rows = [
-            '<tr>{}</tr>'.format(''.join(['<th>{}</th>'.format(s) for s in column_names]))]
-        for _ in range(10 ** 3):
-            line = line_iter.next()
-            if line.startswith('```'):
-                break
-            if not re.search('[a-zA-Z]{4,}', line):
-                continue
-            column_cells = ['<td>{}</td>'.format(s) for s in line.split()]
+        filtered_cols = [name for name in column_names if name in repo_dict['app_dicts'][0]]
+
+        table_rows = []
+        ths = ['<th>{}</th>'.format(key_to_column_str(s)) for s in filtered_cols]
+        table_rows.append('<tr>{}</tr>'.format(''.join(ths)))
+        for app_dict in repo_dict['app_dicts']:
+            column_cells = []
+            for key in filtered_cols:
+                column_cells.append('<td>{}</td>'.format(get_table_val(app_dict, key)))
             table_rows.append('<tr>{}</tr>'.format(''.join(column_cells)))
+
         table_id = table_title.lower().replace(' ', '-')
         tables.append('''
         <div class="table-container" id="{}">
@@ -101,6 +97,21 @@ def build_tables(report_path, table_titles):
         '''.format(table_id, table_title, table_title.lower().replace(' ', '-'),
                    '\n'.join(table_rows)))
     return tables
+
+def key_to_column_str(s):
+    if s == 'icon_str':
+        return ''
+    words = s.split('_')
+    return ' '.join(word[0].upper() + word[1:] for word in words)
+
+def get_table_val(app_dict, key):
+    if key == 'domain_name':
+        domain_name = app_dict[key]
+        return '<a href="https://{}">{}</a>'.format(domain_name, domain_name)
+    elif key == 'app_name':
+        app_name = app_dict[key]
+        return '<a href="https://dashboard.heroku.com/apps/{}">{}</a>'.format(app_name, app_name)
+    return app_dict[key]
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=port, debug=(port != 80))

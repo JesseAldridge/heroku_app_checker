@@ -1,32 +1,10 @@
 ![Screenshot](/screenshot2.png?raw=true "Screenshot")
 
-Keep track of many parallel heroku instances in one place.
+Keep track of many parallel heroku deployments in one place.
 
 # Installation
 
-Note: I haven't yet tested these instructions, so there are probably a few rough edges here and 
-there.
-
-Clone the repo:  `git clone https://github.com/JesseAldridge/heroku_app_checker`
-
-Create a `secrets.py` file following the format in `secrets.py.fake_example`.
-
-Create a Ubuntu [ec2 box](https://aws.amazon.com/ec2/) (the smallest kind is fine).
-
-Make sure port 80 is accessible (configured via security group).
-
-Modify your ~/.ssh/config to point to it.  Mine looks something like this:
-
-    Host app-checker
-        HostName 12.345.56.789
-        User ubuntu
-        IdentityFile ~/.ssh/my-ssh-key.pem
-
-Install [Fabric](http://www.fabfile.org/) on your local machine.
-
-rsync the files to the remote server.  You can just run `fab deploy_server` to do this.
-
-ssh into the server.  `ssh app-checker`
+Create a `conf.py` file following the format in `conf.py.fake_example`.
 
 Install pip:  `sudo easy_install pip`  
 Install gunicorn:  `sudo apt-get install gunicorn`  
@@ -43,8 +21,4 @@ Clone the repos you want to track:
 Switch to the application directory:  `cd heroku_app_checker`
 
 Run gunicorn:  `sudo gunicorn server:app -w 4 -b 0.0.0.0:80 --log-file=- &`  
-Run the report generator loop:  `python loop.py &`  
-
-Ctrl+D to logoff
-
-You should now be able to view the app at the ip of the ec2 box.
+Run the report generator loop:  `python pull_repo_dicts.py &`  
