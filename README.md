@@ -1,4 +1,4 @@
-![Screenshot](/screenshot2.png?raw=true "Screenshot")
+![Screenshot](/screenshot.png?raw=true "Screenshot")
 
 Keep track of many parallel heroku deployments in one place.
 
