@@ -31,7 +31,9 @@ def pull_repo_dicts_inner(testing):
         stdout = proc.communicate()[0]
         commit_to_tag = {}
         for match in re.finditer('([a-z0-9]+) refs/tags/([a-z0-9\.\-]+)', stdout):
-            commit_to_tag[match.group(1)[:7]] = match.group(2)
+            commit = match.group(1)[:7]
+            tag = match.group(2)
+            commit_to_tag[commit] = tag
 
         # For each app defined in conf.py...
 
