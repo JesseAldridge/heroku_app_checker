@@ -5,8 +5,6 @@ from datetime import datetime
 
 import flask
 
-import secrets
-
 #
 # On each request, parse the latest ~/repos.json and return it as an html table.
 #
