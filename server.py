@@ -56,6 +56,7 @@ def index():
         }
 
         .last_mod { margin-top: 20px; }
+        .heroku { width: 15px; height: 15px }
     </style>
 
     <div class='outer'>
@@ -83,7 +84,8 @@ def build_tables(report_path, table_titles):
         for app_dict in repo_dict['app_dicts']:
             column_cells = []
             for key in filtered_cols:
-                column_cells.append('<td>{}</td>'.format(get_table_val(app_dict, key)))
+                table_val = get_table_val(app_dict, key, table_title.lower().startswith('front'))
+                column_cells.append('<td>{}</td>'.format(table_val))
             table_rows.append('<tr>{}</tr>'.format(''.join(column_cells)))
 
         table_id = table_title.lower().replace(' ', '-')
@@ -99,18 +101,21 @@ def build_tables(report_path, table_titles):
     return tables
 
 def key_to_column_str(s):
-    if s == 'icon_str':
+    if s in ('icon_str', 'app_name'):
         return ''
     words = s.split('_')
     return ' '.join(word[0].upper() + word[1:] for word in words)
 
-def get_table_val(app_dict, key):
-    if key == 'domain_name':
+def get_table_val(app_dict, key, should_link_domain):
+    if key == 'domain_name' and should_link_domain:
         domain_name = app_dict[key]
         return '<a href="https://{}">{}</a>'.format(domain_name, domain_name)
     elif key == 'app_name':
         app_name = app_dict[key]
-        return '<a href="https://dashboard.heroku.com/apps/{}">{}</a>'.format(app_name, app_name)
+        return '''
+            <a href="https://dashboard.heroku.com/apps/{}">
+                <img class='heroku' src="https://dashboard.heroku.com/images/favicon.ico">
+            </a>'''.format(app_name)
     return app_dict[key]
 
 if __name__ == '__main__':
