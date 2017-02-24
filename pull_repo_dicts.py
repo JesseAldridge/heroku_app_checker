@@ -37,12 +37,12 @@ def pull_repo_dicts_inner(testing):
             commit_to_tag[commit] = tag
 
         commit_tag_list = sorted(commit_to_tag.items(), key=lambda t: t[1])
-        print 'commit_to_tag:', '\n'.join([str(t) for t in commit_tag_list][-10:])
+        print 'commit_to_tag:', '\n'.join([str(t) for t in commit_tag_list][-100:])
 
         # For each app defined in conf.py...
 
         if testing:
-            app_tuples = app_tuples[:2]
+            app_tuples = app_tuples[:3]
 
         repo_dict['app_dicts'] = [build_app_dict(commit_to_tag, *t) for t in app_tuples]
 
