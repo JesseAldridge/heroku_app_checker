@@ -6,10 +6,13 @@ Keep track of many parallel heroku deployments in one place.
 
 Create a `conf.py` file following the format in `conf.py.fake_example`.
 
-Install pip:  `sudo easy_install pip`  
-Install gunicorn:  `sudo apt-get install gunicorn`  
-Install requirements:  `pip install -r requirements.txt --user`.  
-Install heroku toolbelt:  `wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh`  
+Install requirements:
+```
+sudo easy_install pip
+sudo apt-get install gunicorn`
+pip install -r requirements.txt --user
+wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+```
 
 For a non-public repo, add a GitHub ssh key to `~/.ssh/`  
 (You may want to create a separate user for this if you are collaborating with others.)

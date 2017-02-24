@@ -39,53 +39,64 @@ def pull_repo_dicts_inner(testing):
 
         if testing:
             app_tuples = app_tuples[:2]
-        for icon_str, app_name, should_check_alembic in app_tuples:
 
-            # Pull deployed commit and tag from heroku.
+        repo_dict['app_dicts'] = [build_app_dict(commit_to_tag, *t) for t in app_tuples]
 
-            print 'pulling:', app_name
-            proc = subprocess.Popen(
-                'heroku releases --app {}'.format(app_name).split(), stdout=subprocess.PIPE)
-            stdout = proc.communicate()[0]
-            match = re.search('Deploy ([a-z0-9]+)', stdout)
-            commit = match.group(1)
-            tag = commit_to_tag.get(commit)
-
-            app_dict = {
-                'icon_str': icon_str,
-                'app_name': app_name,
-                'commit': commit,
-                'tag': tag
-            }
-            repo_dict['app_dicts'].append(app_dict)
-
-            # Pull alembic version.
-
-            if should_check_alembic:
-                proc = subprocess.Popen(
-                    'heroku config:get ALEMBIC_DATABASE_URL --app {}'.format(app_name).split(),
-                    stdout=subprocess.PIPE)
-                _db_url_with_creds = proc.communicate()[0]
-                try:
-                    db = records.Database(_db_url_with_creds)
-                except ValueError:
-                    alembic_version = 'error'
-                else:
-                    rows = db.query('select * from alembic_version')
-                    alembic_version = rows[0]['version_num']
-                app_dict['alembic_version'] = alembic_version
-
-            # Pull domain.
-
-            proc = subprocess.Popen('heroku domains --app {}'.format(app_name).split(),
-                                    stdout=subprocess.PIPE)
-            stdout_str = proc.communicate()[0]
-            line_iter = iter(stdout_str.splitlines())
-            for line in line_iter:
-                if line.startswith('──────'):
-                    break
-            app_dict['domain_name'] = line_iter.next().split()[0]
     return repo_dicts
+
+def build_app_dict(commit_to_tag, icon_str, app_name, should_check_alembic):
+    # Pull deployed commit and tag from heroku.
+
+    app_dict = {
+        'icon_str': icon_str,
+        'app_name': app_name,
+        'commit': None,
+        'tag': None,
+        'alembic_version': None,
+        'domain_name': None,
+        'error': False
+    }
+
+    print 'pulling:', app_name
+    proc = subprocess.Popen(
+        'heroku releases --app {}'.format(app_name).split(), stdout=subprocess.PIPE)
+    stdout = proc.communicate()[0]
+    match = re.search('Deploy ([a-z0-9]+)', stdout)
+    try:
+        commit = match.group(1)
+    except AttributeError:
+        app_dict['error'] = True
+        return app_dict
+    tag = commit_to_tag.get(commit)
+
+    # Pull alembic version.
+
+    if should_check_alembic:
+        proc = subprocess.Popen(
+            'heroku config:get ALEMBIC_DATABASE_URL --app {}'.format(app_name).split(),
+            stdout=subprocess.PIPE)
+        _db_url_with_creds = proc.communicate()[0]
+        try:
+            db = records.Database(_db_url_with_creds)
+        except ValueError:
+            alembic_version = 'error'
+        else:
+            rows = db.query('select * from alembic_version')
+            alembic_version = rows[0]['version_num']
+        app_dict['alembic_version'] = alembic_version
+
+    # Pull domain.
+
+    proc = subprocess.Popen('heroku domains --app {}'.format(app_name).split(),
+                            stdout=subprocess.PIPE)
+    stdout_str = proc.communicate()[0]
+    line_iter = iter(stdout_str.splitlines())
+    for line in line_iter:
+        if line.startswith('──────'):
+            break
+    app_dict['domain_name'] = line_iter.next().split()[0]
+    return app_dict
+
 
 if __name__ == '__main__':
     testing = (len(sys.argv) == 2 and sys.argv[1] == 'test')
