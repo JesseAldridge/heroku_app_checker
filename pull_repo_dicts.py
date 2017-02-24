@@ -28,12 +28,16 @@ def pull_repo_dicts_inner(testing):
         subprocess.call('git fetch --tags'.split())
         proc = subprocess.Popen(
             'git show-ref --tags --dereference'.split(), stdout=subprocess.PIPE)
+
         stdout = proc.communicate()[0]
         commit_to_tag = {}
         for match in re.finditer('([a-z0-9]+) refs/tags/([a-z0-9\.\-]+)', stdout):
             commit = match.group(1)[:7]
             tag = match.group(2)
             commit_to_tag[commit] = tag
+
+        commit_tag_list = sorted(commit_to_tag.items(), key=lambda t: t[1])
+        print 'commit_to_tag:', '\n'.join([str(t) for t in commit_tag_list][-10:])
 
         # For each app defined in conf.py...
 
@@ -62,12 +66,12 @@ def build_app_dict(commit_to_tag, icon_str, app_name, should_check_alembic):
         'heroku releases --app {}'.format(app_name).split(), stdout=subprocess.PIPE)
     stdout = proc.communicate()[0]
     match = re.search('Deploy ([a-z0-9]+)', stdout)
-    try:
-        commit = match.group(1)
-    except AttributeError:
-        app_dict['error'] = True
-        return app_dict
-    tag = commit_to_tag.get(commit)
+    commit = None
+    if match:
+        commit = app_dict['commit'] = match.group(1)
+
+    print 'commit:', commit
+    app_dict['tag'] = commit_to_tag.get(commit)
 
     # Pull alembic version.
 
@@ -94,7 +98,10 @@ def build_app_dict(commit_to_tag, icon_str, app_name, should_check_alembic):
     for line in line_iter:
         if line.startswith('──────'):
             break
-    app_dict['domain_name'] = line_iter.next().split()[0]
+    try:
+        app_dict['domain_name'] = line_iter.next().split()[0]
+    except StopIteration:
+        pass
     return app_dict
 
 
