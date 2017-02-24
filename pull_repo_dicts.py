@@ -56,7 +56,6 @@ def build_app_dict(commit_to_tag, icon_str, app_name, should_check_alembic):
         'app_name': app_name,
         'commit': None,
         'tag': None,
-        'alembic_version': None,
         'domain_name': None,
         'error': False
     }
