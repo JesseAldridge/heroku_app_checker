@@ -97,10 +97,8 @@ def build_app_dict(commit_to_tag, icon_str, app_name, should_check_alembic):
     for line in line_iter:
         if line.startswith('──────'):
             break
-    try:
-        app_dict['domain_name'] = line_iter.next().split()[0]
-    except StopIteration:
-        pass
+    for line in line_iter:
+        app_dict['domain_name'] = line.split()[0]
     return app_dict
 
 
