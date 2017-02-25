@@ -62,7 +62,7 @@ def build_app_dict(commit_to_tag, icon_str, app_name, should_check_alembic):
 
     print 'pulling:', app_name
     proc = subprocess.Popen(
-        'heroku releases --app {}'.format(app_name).split(), stdout=subprocess.PIPE)
+        'heroku releases -n100 --app {}'.format(app_name).split(), stdout=subprocess.PIPE)
     stdout = proc.communicate()[0]
     match = re.search('Deploy ([a-z0-9]+)', stdout)
     commit = None
