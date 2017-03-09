@@ -86,6 +86,8 @@ def build_app_dict(commit_to_tag, icon_str, app_name, should_check_alembic):
         else:
             rows = db.query('select * from alembic_version')
             alembic_version = rows[0]['version_num']
+        finally:
+            db.close()
         app_dict['alembic_version'] = alembic_version
 
     # Pull domain.
